@@ -1,13 +1,15 @@
 let mgr;
 
-
+function preload(){
+ backgroundimg = loadImage('public/assets/img/background.gif');
+}
 
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     mgr = new SceneManager();
     mgr.wire();
-    mgr.showScene(test);
+    mgr.showScene(Loadscreen);
 }
 
 
