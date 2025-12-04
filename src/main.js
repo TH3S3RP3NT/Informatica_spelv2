@@ -1,15 +1,15 @@
-let mgr;
+let sceneManager;
 
 function preload(){
- backgroundimg = loadImage('public/assets/img/background.gif');
+ fightimg = loadImage('public/assets/img/fight.gif');
 }
 
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    mgr = new SceneManager();
-    mgr.wire();
-    mgr.showScene(Loadscreen);
+    sceneManager = new SceneManager();
+    sceneManager.wire();
+    sceneManager.showScene(Loadscreen);
 }
 
 
@@ -18,20 +18,20 @@ function windowResized() {
 }
 
 function draw() {
-    mgr.draw();
+    sceneManager.draw();
 }
 
 function keyPressed() {
-    mgr.handleEvent("keyPressed");
+    sceneManager.handleEvent("keyPressed");
 }
 
 function mousePressed() {
-    mgr.handleEvent("mousePressed");
+    sceneManager.handleEvent("mousePressed");
 }
 
 function mouseReleased() {
-    mgr.handleEvent("mouseReleased");
+    sceneManager.handleEvent("mouseReleased");
 }
 function mouseMoved() {
-    mgr.handleEvent("mouseMoved");
+    sceneManager.handleEvent("mouseMoved");
 }
