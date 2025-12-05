@@ -3,6 +3,7 @@ function Loadscreen() {
 
     this.setup = function() {
         clear();
+        textFont(font);
         this.buttons = [
             new Button(width/2, height/2 - 60, 'Start Game', () => {
                 this.sceneManager.showScene(Game);
@@ -18,18 +19,18 @@ function Loadscreen() {
 
     this.draw = function() {
         background(fightimg);
-        // Title
+
         fill(255, 215, 0);
         textSize(64);
         textAlign(CENTER, CENTER);
         text('Informatica Game v2', width/2, 150);
 
-        // Subtitle
-        fill(200, 200, 255);
-        textSize(24);
-        text('Adventure Awaits!', width/2, 220);
 
-        // Draw buttons
+        fill(255, 200, 255);
+        textSize(24);
+        text('Ondertitel', width/2, 220);
+
+
         this.buttons.forEach(button => button.draw());
     };
 

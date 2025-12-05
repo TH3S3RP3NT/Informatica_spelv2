@@ -2,6 +2,7 @@ let sceneManager;
 
 function preload(){
  fightimg = loadImage('public/assets/img/fight.gif');
+ font = loadFont('public/assets/fonts/AvenirLTProBook.otf')
 }
 
 

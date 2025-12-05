@@ -3,6 +3,7 @@ function Credits() {
 
     this.setup = function() {
         clear();
+        textFont(font);
         this.buttons = [
             new Button(width/2, height - 80, 'Back', () => {
                 this.sceneManager.showScene(Loadscreen);
@@ -12,13 +13,13 @@ function Credits() {
 
     this.draw = function() {
         background(fightimg);
-        // Title
+
         fill(255, 215, 0);
         textSize(48);
         textAlign(CENTER, CENTER);
         text('CREDITS', width/2, 150);
 
-        // Credits text
+
         fill(200, 200, 255);
         textSize(20);
         textAlign(CENTER);
@@ -38,11 +39,11 @@ function Credits() {
             y += 30;
         });
 
-        // Version
+
         textSize(16);
         text('Version 1.0.0', width/2, 450);
 
-        // Draw back button
+
         this.buttons.forEach(button => button.draw());
     };
 
