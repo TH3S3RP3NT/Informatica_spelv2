@@ -25,12 +25,11 @@ function Credits() {
         textAlign(CENTER);
 
         const credits = [
-            'Game Design: Your Name',
-            'Programming: Your Name',
-            'Art: Your Name',
-            'Music: Your Name',
-            '',
-            'Special Thanks: Everyone!'
+            'Game Design: Tristan de Groot',
+            'Programming: Tristan de Groot',
+            'Art: Tristan de Groot',
+            'Music: Tristan de Groot',
+            ''
         ];
 
         let y = 250;
@@ -41,7 +40,7 @@ function Credits() {
 
 
         textSize(16);
-        text('Version 1.0.0', width/2, 450);
+        text('Version 0.0.1', width/2, 450);
 
 
         this.buttons.forEach(button => button.draw());
