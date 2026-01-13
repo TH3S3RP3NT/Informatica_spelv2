@@ -1,58 +1,55 @@
 function Game() {
-    this.test1 = null;
-    this.test2 = null;
     this.send = null;
+    this.gameStarted = false;
+    this.buttons = [];
+    this.nameSaved = false;
+    let Username;
+
+    const inputWidth = 300;
+    const inputHeight = 30;
 
     this.setup = function () {
         clear();
         textFont(font);
+        Username = createInput();
+        Username.position(width/2, height/2+200);
+        Username.size(inputWidth, inputHeight);
+        Username.style('text-align', 'center');
+        Username.hide();
+        this.buttons = [
+            new Button(width/2, height / 3 + 50, 'Begin!', () => {
+                this.gameStarted = true;
+            }),
+            new Button(width/2, height / 2 + 20, 'Opslaan', () => {
+                this.save();
+            })
+        ];
 
-
-        if (!this.test1) {
-            this.test1 = createInput();
-            this.test1.position(width / 2 + 20, height / 2 + 60);
-            this.test1.attribute('placeholder', 'Enter username');
-            this.test1.show();
-        } else {
-            this.test1.position(width / 2 + 20, height / 2 + 60);
-            this.test1.value('');
-            this.test1.show();
-        }
-
-        if (!this.test2) {
-            this.test2 = createInput();
-            this.test2.position(width / 2 + 20, height / 2 + 110);
-            this.test2.attribute('placeholder', 'Enter score');
-            this.test2.show();
-        } else {
-            this.test2.position(width / 2 + 20, height / 2 + 110);
-            this.test2.value('');
-            this.test2.show();
-        }
-
-        if (!this.send) {
-            this.send = createButton('Send Score');
-            this.send.position(width / 2 + 20, height / 2 + 140);
-            this.send.mousePressed(this.sendScore.bind(this));
-            this.send.show();
-        } else {
-            this.send.position(width / 2 + 20, height / 2 + 140);
-            this.send.show();
-        }
-    };
+    }
 
     this.draw = function () {
         background(fightimg);
         fill(255);
-        textSize(32);
-        textAlign(CENTER, CENTER);
-        text('GAME SCENE', width / 2, height / 2 - 100);
+        this.buttons.forEach(button => button.draw());
+
+        if (!this.gameStarted) {
+            text("Klaar?", width / 2, height / 3);
+        } else {
+
+            text("Voer je naam in:", width/2, height/3 + 20);
+            Username.show();
 
 
-        textSize(18);
-        textAlign(RIGHT, CENTER);
-        text('Username:', width / 2, height / 2 + 60);
-        text('Score:', width / 2, height / 2 + 110);
+
+
+
+
+            if (this.nameSaved) {
+                sceneManager.showScene(Leaderboard);
+
+
+            }
+        }
     };
 
     this.sendScore = function () {
@@ -97,27 +94,13 @@ function Game() {
         }.bind(this));
     };
 
-    this.hideAllStrayInputs = function() {
-        const inputs = document.querySelectorAll('input, button');
-        inputs.forEach(el => {
-            if (el.style && el !== this.test1.elt && el !== this.test2.elt && el !== this.send.elt) {
-                el.style.display = 'none';
-                el.style.visibility = 'hidden';
-            }
-        });
+    this.mouseMoved = function() {
+        this.buttons.forEach(button => button.updateHover());
     };
 
-    this.cleanup = function() {
-        if (this.test1) {
-            this.test1.hide();
-            this.test1.value('');
-        }
-        if (this.test2) {
-            this.test2.hide();
-            this.test2.value('');
-        }
-        if (this.send) this.send.hide();
-
-        this.hideAllStrayInputs();
-    };
+    this.save = function() {
+        storeItem('username', Username.value().trim());
+        this.nameSaved = true;
+        Username.hide();
+    }
 }

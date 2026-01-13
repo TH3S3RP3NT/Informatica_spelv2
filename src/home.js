@@ -1,5 +1,7 @@
 function Loadscreen() {
     this.buttons = [];
+    let currentTrackIndex = 0;
+    let isMusicPlaying = false;
 
     this.setup = function() {
         clear();
@@ -36,9 +38,33 @@ function Loadscreen() {
 
     this.mousePressed = function() {
         this.buttons.forEach(button => button.checkClick());
+        this.playMusic();
     };
 
     this.mouseMoved = function() {
         this.buttons.forEach(button => button.updateHover());
     };
+    this.playMusic = function() {// Tristan
+        if (!isMusicPlaying && muziek.length > 0) {
+            muziek[currentTrackIndex].play();
+            isMusicPlaying = true;
+            muziek[currentTrackIndex].onended(this.playNextTrack.bind(this));
+        }
+    }
+
+    this.playNextTrack = function() {// Tristan
+        if (muziek[currentTrackIndex] && muziek[currentTrackIndex].isPlaying()) {
+            muziek[currentTrackIndex].stop();
+        }
+
+        currentTrackIndex++;
+        if (currentTrackIndex >= muziek.length) {
+            currentTrackIndex = 0;
+        }
+
+        if (muziek[currentTrackIndex]) {
+            muziek[currentTrackIndex].play();
+            muziek[currentTrackIndex].onended(this.playNextTrack.bind(this));
+        }
+    }
 }
