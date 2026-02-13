@@ -7,9 +7,13 @@ class Button {
         this.width = 200;
         this.height = 50;
         this.hover = false;
+        this.visible = true;
+        this.enabled = true;
     }
 
     draw() {
+        if (!this.visible) return;
+
         if (this.hover) fill(100, 100, 200);
         else fill(70, 70, 150);
 
@@ -31,6 +35,12 @@ class Button {
     }
 
     updateHover() {
+        if (!this.visible || !this.enabled) {
+            this.hover = false;
+            cursor(ARROW);
+            return;
+        }
+
         this.hover = (
             mouseX > this.x - this.width/2 &&
             mouseX < this.x + this.width/2 &&
@@ -43,50 +53,71 @@ class Button {
     }
 
     checkClick() {
-        if (this.hover) this.action();
+        if (this.visible && this.enabled && this.hover) {
+            this.action();
+        }
+    }
+
+
+    hide() {
+        this.visible = false;
+        this.hover = false;
+    }
+
+    show() {
+        this.visible = true;
+    }
+
+    toggleVisibility() {
+        this.visible = !this.visible;
+        if (!this.visible) this.hover = false;
+    }
+
+    isVisible() {
+        return this.visible;
+    }
+
+
+    disable() {
+        this.enabled = false;
+        this.hover = false;
+    }
+
+    enable() {
+        this.enabled = true;
     }
 }
 
 class ToggleButton extends Button {
-    constructor(x, y, label, initialState) {
+    constructor(x, y, label, initialState, onToggle) {
         super(x, y, label, () => this.toggle());
         this.state = initialState;
+        this.onToggle = onToggle;
         this.updateLabel();
     }
 
     toggle() {
         this.state = !this.state;
         this.updateLabel();
+
+
+        if (this.onToggle) {
+            this.onToggle(this.state);
+        }
     }
 
     updateLabel() {
-        const prefix = this.label.split(':')[0];
-        this.label = prefix + ': ' + (this.state ? 'ON' : 'OFF');
+        
+        this.label = this.label.split(' [')[0] + (this.state ? ' [ON]' : ' [OFF]');
     }
 
-    draw() {
-        if (this.state) {
-            if (this.hover) fill(80, 180, 80);
-            else fill(60, 140, 60);
-        } else {
-            if (this.hover) fill(180, 80, 80);
-            else fill(140, 60, 60);
-        }
 
-        rectMode(CENTER);
-        rect(this.x, this.y, this.width, this.height, 10);
+    getState() {
+        return this.state;
+    }
 
-        stroke(255, 215, 0);
-        strokeWeight(2);
-        noFill();
-        rect(this.x, this.y, this.width, this.height, 10);
-        noStroke();
-
-        fill(255);
-        textSize(20);
-        textAlign(CENTER, CENTER);
-        text(this.label, this.x, this.y);
-
-        this.updateHover();
+    setState(newState) {
+        this.state = newState;
+        this.updateLabel();
     }
 }

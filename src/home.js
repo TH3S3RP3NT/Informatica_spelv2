@@ -15,6 +15,9 @@ function Loadscreen() {
             }),
             new Button(width/2, height/2 + 80, 'Credits', () => {
                 this.sceneManager.showScene(Credits);
+            }),
+            new Button(width/2, height/2 + 150, 'Leaderboard', () => {
+                this.sceneManager.showScene(Leaderboard);
             })
         ];
     };
@@ -34,6 +37,8 @@ function Loadscreen() {
 
 
         this.buttons.forEach(button => button.draw());
+        storeItem('CTI', currentTrackIndex);
+        storeItem('IMP', isMusicPlaying);
     };
 
     this.mousePressed = function() {
@@ -44,7 +49,7 @@ function Loadscreen() {
     this.mouseMoved = function() {
         this.buttons.forEach(button => button.updateHover());
     };
-    this.playMusic = function() {// Tristan
+    this.playMusic = function() {
         if (!isMusicPlaying && muziek.length > 0) {
             muziek[currentTrackIndex].play();
             isMusicPlaying = true;
@@ -52,7 +57,7 @@ function Loadscreen() {
         }
     }
 
-    this.playNextTrack = function() {// Tristan
+    this.playNextTrack = function() {
         if (muziek[currentTrackIndex] && muziek[currentTrackIndex].isPlaying()) {
             muziek[currentTrackIndex].stop();
         }

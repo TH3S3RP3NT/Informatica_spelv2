@@ -9,7 +9,7 @@ function Leaderboard() {
     let colRankX, colPlayerX, colScoreX, colDateX;
     let tableWidth, tableX, rowHeight;
 
-    this.setup = function() {
+    this.setup = function () {
         clear();
         textFont(font);
 
@@ -17,7 +17,7 @@ function Leaderboard() {
         this.calculateColumnPositions();
 
 
-        refreshButton = new Button(width/2 - 110, height - 80, 'Refresh', () => {
+        refreshButton = new Button(width / 2 - 110, height - 80, 'Refresh', () => {
             const now = Date.now();
             if (now - lastFetchTime > FETCH_COOLDOWN) {
                 this.fetchScores();
@@ -25,7 +25,7 @@ function Leaderboard() {
             }
         });
 
-        backButton = new Button(width/2 + 110, height - 80, 'Back', () => {
+        backButton = new Button(width / 2 + 110, height - 80, 'Back', () => {
             this.sceneManager.showScene(Loadscreen);
         });
 
@@ -33,11 +33,11 @@ function Leaderboard() {
         this.fetchScores();
     };
 
-    this.hideAllInputs = function() {
-        // Find and hide all p5.js created DOM elements
+    this.hideAllInputs = function () {
+
         const allElements = document.querySelectorAll('input, button, textarea, select');
         allElements.forEach(el => {
-            // Check if it's likely a p5.js element (not our canvas buttons)
+
             if (!el.classList.contains('p5Button') &&
                 !el.classList.contains('p5Input') &&
                 el.id !== 'defaultCanvas0') {
@@ -50,7 +50,7 @@ function Leaderboard() {
         });
     };
 
-    this.calculateColumnPositions = function() {
+    this.calculateColumnPositions = function () {
 
         tableWidth = min(width - 100, 900);
         tableX = (width - tableWidth) / 2;
@@ -62,18 +62,18 @@ function Leaderboard() {
         colDateX = tableX + tableWidth - 30;
     };
 
-    this.draw = function() {
+    this.draw = function () {
         background(fightimg);
 
 
         fill(255, 215, 0);
         textSize(48);
         textAlign(CENTER, CENTER);
-        text('LEADERBOARD', width/2, 80);
+        text('LEADERBOARD', width / 2, 80);
 
         fill(200, 200, 255);
         textSize(18);
-        text('Top 10 Scores', width/2, 120);
+        text('Top 10 Scores', width / 2, 120);
 
         this.drawTable();
 
@@ -84,11 +84,11 @@ function Leaderboard() {
             fill(255);
             textSize(20);
             textAlign(CENTER, CENTER);
-            text('Loading scores...', width/2, height/2);
+            text('Loading scores...', width / 2, height / 2);
         }
     };
 
-    this.drawTable = function() {
+    this.drawTable = function () {
         const headerY = 160;
         const startY = headerY + 40;
 
@@ -96,7 +96,7 @@ function Leaderboard() {
         this.drawScoresList(startY);
     };
 
-    this.drawHeaders = function(y) {
+    this.drawHeaders = function (y) {
         fill(255, 215, 0);
         textSize(16);
         textFont(font);
@@ -117,7 +117,7 @@ function Leaderboard() {
         noStroke();
     };
 
-    this.drawScoresList = function(startY) {
+    this.drawScoresList = function (startY) {
         const maxVisible = Math.min(10, Math.floor((height - startY - 100) / rowHeight));
 
         for (let i = 0; i < Math.min(scores.length, maxVisible); i++) {
@@ -135,7 +135,7 @@ function Leaderboard() {
             } else {
                 fill(200, 200, 255);
             }
-            text(`${i + 1}.`, colRankX, y + rowHeight/2);
+            text(`${i + 1}.`, colRankX, y + rowHeight / 2);
 
             fill(255);
             textSize(16);
@@ -144,7 +144,7 @@ function Leaderboard() {
                 playerName = playerName.substring(0, 15) + '...';
             }
             textAlign(LEFT, CENTER);
-            text(playerName, colPlayerX, y + rowHeight/2);
+            text(playerName, colPlayerX, y + rowHeight / 2);
 
             if (i < 3) {
                 fill(255, 215, 0);
@@ -153,19 +153,19 @@ function Leaderboard() {
             }
             textSize(18);
             textAlign(RIGHT, CENTER);
-            text(score.SCORE || 0, colScoreX, y + rowHeight/2);
+            text(score.SCORE || 0, colScoreX, y + rowHeight / 2);
 
             fill(200, 200, 255);
             textSize(14);
             textAlign(RIGHT, CENTER);
-            text(this.formatDate(score.DATE), colDateX, y + rowHeight/2);
+            text(this.formatDate(score.DATE), colDateX, y + rowHeight / 2);
         }
 
         if (scores.length === 0) {
             fill(255, 200, 200);
             textSize(18);
             textAlign(CENTER, CENTER);
-            text('No scores yet. Be the first!', width/2, startY + 50);
+            text('No scores yet. Be the first!', width / 2, startY + 50);
         }
 
 
@@ -178,7 +178,7 @@ function Leaderboard() {
         }
     };
 
-    this.formatDate = function(dateString) {
+    this.formatDate = function (dateString) {
         if (!dateString) return 'N/A';
         try {
             const date = new Date(dateString);
@@ -191,7 +191,7 @@ function Leaderboard() {
         }
     };
 
-    this.fetchScores = async function() {
+    this.fetchScores = async function () {
         try {
             const response = await fetch('https://api.tristan.informatica-corlaer.nl/get_scores.php');
             const data = await response.json();
@@ -219,7 +219,7 @@ function Leaderboard() {
         }
     };
 
-    this.loadFromLocalStorage = function() {
+    this.loadFromLocalStorage = function () {
         const storedData = localStorage.getItem('gameLeaderboard');
         if (storedData) {
             try {
@@ -237,17 +237,17 @@ function Leaderboard() {
         }
     };
 
-    this.mousePressed = function() {
+    this.mousePressed = function () {
         refreshButton.checkClick();
         backButton.checkClick();
     };
 
-    this.mouseMoved = function() {
+    this.mouseMoved = function () {
         refreshButton.updateHover();
         backButton.updateHover();
     };
 
-    this.windowResized = function() {
+    this.windowResized = function () {
         this.calculateColumnPositions();
     };
 }

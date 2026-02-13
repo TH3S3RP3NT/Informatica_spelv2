@@ -1,6 +1,8 @@
 function Settings() {
     this.buttons = [];
     this.toggles = [];
+    let currentTrackIndex = getItem('CTI');
+    let isMusicPlaying = getItem('IMP');
 
     this.setup = function() {
         clear();
@@ -12,7 +14,13 @@ function Settings() {
         ];
 
         this.toggles = [
-            new ToggleButton(width/2, height/2 - 30, 'Music: ON', true),
+            new ToggleButton(width/2, height/2 - 30, 'Music: ON', true, (state) => {
+                if (state && isMusicPlaying) {
+                    muziek[currentTrackIndex].play();
+                } else if (!state && isMusicPlaying) {
+                    muziek[currentTrackIndex].pause();
+                }
+            }),
             new ToggleButton(width/2, height/2 + 30, 'Sound: ON', true)
         ];
     };

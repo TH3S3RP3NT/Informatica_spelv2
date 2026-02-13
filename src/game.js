@@ -1,53 +1,54 @@
 function Game() {
     this.send = null;
     this.gameStarted = false;
-    this.buttons = [];
     this.nameSaved = false;
     let Username;
+    let BeginButton;
+    let SaveButton;
 
     const inputWidth = 300;
     const inputHeight = 30;
+
 
     this.setup = function () {
         clear();
         textFont(font);
         Username = createInput();
-        Username.position(width/2, height/2+200);
+        Username.position(width / 2 - 150, height / 3 + 50);
         Username.size(inputWidth, inputHeight);
         Username.style('text-align', 'center');
         Username.hide();
-        this.buttons = [
-            new Button(width/2, height / 3 + 50, 'Begin!', () => {
-                this.gameStarted = true;
-            }),
-            new Button(width/2, height / 2 + 20, 'Opslaan', () => {
-                this.save();
-            })
-        ];
+        BeginButton = createButton('Begin');
+        BeginButton.position(width / 2 - 100, height / 3 + 100);
+        BeginButton.size(200, 50);
+        BeginButton.mousePressed(this.gameStarted = true);
+        BeginButton.hide();
+        SaveButton = createButton('Opslaan');
+        SaveButton.position(width / 2 - 100, height / 3 + 100);
+        SaveButton.size(200, 50);
+        SaveButton.mousePressed(this.save.bind(this));
+        SaveButton.hide();
 
     }
 
     this.draw = function () {
         background(fightimg);
         fill(255);
-        this.buttons.forEach(button => button.draw());
 
         if (!this.gameStarted) {
             text("Klaar?", width / 2, height / 3);
+            BeginButton.show();
         } else {
-
-            text("Voer je naam in:", width/2, height/3 + 20);
+            BeginButton.hide();
+            text("Voer je naam in:", width / 2, height / 3 + 20);
             Username.show();
-
-
-
-
+            SaveButton.show();
 
 
             if (this.nameSaved) {
-                sceneManager.showScene(Leaderboard);
-
-
+                SaveButton.hide();
+                Username.hide();
+                sceneManager.showScene(Dash);
             }
         }
     };
@@ -75,30 +76,14 @@ function Game() {
         httpGet(fullUrl, 'text', function (response) {
             console.log("Server Response:", response);
 
-
-            if (this.test1) {
-                this.test1.value('');
-                this.test1.hide();
-            }
-            if (this.test2) {
-                this.test2.value('');
-                this.test2.hide();
-            }
-            if (this.send) this.send.hide();
-
-            this.hideAllStrayInputs();
-
             setTimeout(() => {
                 sceneManager.showScene(Leaderboard);
             }, 500);
         }.bind(this));
     };
 
-    this.mouseMoved = function() {
-        this.buttons.forEach(button => button.updateHover());
-    };
 
-    this.save = function() {
+    this.save = function () {
         storeItem('username', Username.value().trim());
         this.nameSaved = true;
         Username.hide();
