@@ -91,6 +91,7 @@ class Button {
 class ToggleButton extends Button {
     constructor(x, y, label, initialState, onToggle) {
         super(x, y, label, () => this.toggle());
+        this.baseLabel = label.split(':')[0];
         this.state = initialState;
         this.onToggle = onToggle;
         this.updateLabel();
@@ -100,15 +101,13 @@ class ToggleButton extends Button {
         this.state = !this.state;
         this.updateLabel();
 
-
         if (this.onToggle) {
             this.onToggle(this.state);
         }
     }
 
     updateLabel() {
-        
-        this.label = this.label.split(' [')[0] + (this.state ? ' [ON]' : ' [OFF]');
+        this.label = `${this.baseLabel}: ${this.state ? 'ON' : 'OFF'}`;
     }
 
 

@@ -127,11 +127,11 @@ function Leaderboard() {
             textSize(18);
             textAlign(LEFT, CENTER);
             if (i === 0) {
-                fill(255, 215, 0); // Gold
+                fill(255, 215, 0);
             } else if (i === 1) {
-                fill(192, 192, 192); // Silver
+                fill(192, 192, 192);
             } else if (i === 2) {
-                fill(205, 127, 50); // Bronze
+                fill(205, 127, 50);
             } else {
                 fill(200, 200, 255);
             }
@@ -198,7 +198,6 @@ function Leaderboard() {
 
             if (data.success) {
                 scores = data.data;
-                console.log(`Fetched ${scores.length} scores`);
 
                 localStorage.setItem('gameLeaderboard', JSON.stringify({
                     scores: scores,
@@ -227,7 +226,6 @@ function Leaderboard() {
                 scores = data.scores || [];
                 scores.sort((a, b) => (b.SCORE || 0) - (a.SCORE || 0));
                 scores = scores.slice(0, 10);
-                console.log(`Loaded ${scores.length} scores from localStorage`);
             } catch (error) {
                 console.error('Error parsing localStorage data:', error);
                 scores = [];

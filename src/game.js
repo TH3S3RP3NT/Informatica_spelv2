@@ -1,5 +1,4 @@
 function Game() {
-    this.send = null;
     this.gameStarted = false;
     this.nameSaved = false;
     let Username;
@@ -53,34 +52,6 @@ function Game() {
         }
     };
 
-    this.sendScore = function () {
-        const userVal = (this.test1.value() || '').trim();
-        const scoreRaw = (this.test2.value() || '').trim();
-        const scoreVal = parseInt(scoreRaw, 10);
-
-        if (!userVal) {
-            alert('Please enter a username!');
-            return;
-        }
-
-        if (isNaN(scoreVal) || scoreVal < 0) {
-            alert('Please enter a valid score!');
-            return;
-        }
-
-        let apiUrl = 'https://api.tristan.informatica-corlaer.nl/store.php';
-        let fullUrl = `${apiUrl}?u=${encodeURIComponent(userVal)}&s=${scoreVal}`;
-
-        console.log("Sending to:", fullUrl);
-
-        httpGet(fullUrl, 'text', function (response) {
-            console.log("Server Response:", response);
-
-            setTimeout(() => {
-                sceneManager.showScene(Leaderboard);
-            }, 500);
-        }.bind(this));
-    };
 
 
     this.save = function () {

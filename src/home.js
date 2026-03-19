@@ -1,7 +1,11 @@
 function Loadscreen() {
     this.buttons = [];
-    let currentTrackIndex = 0;
-    let isMusicPlaying = false;
+    let storedPermission = getItem('IMP');
+    let isMusicPlaying = storedPermission === null || storedPermission === undefined ? true : Boolean(storedPermission);
+    if (storedPermission === null || storedPermission === undefined) {
+        storeItem('IMP', true);
+    }
+    let currentTrackIndex = getItem('CTI') || 0;
 
     this.setup = function() {
         clear();
@@ -20,6 +24,9 @@ function Loadscreen() {
                 this.sceneManager.showScene(Leaderboard);
             })
         ];
+        if (Boolean(getItem('IMP'))) {
+            this.playMusic();
+        }
     };
 
     this.draw = function() {
@@ -33,12 +40,13 @@ function Loadscreen() {
 
         fill(255, 200, 255);
         textSize(24);
-        text('Ondertitel', width/2, 220);
+        text('Nieuw jaar, andere game!', width/2, 220);
 
+        if (Boolean(getItem('IMP')) && !isMusicPlaying) {
+            this.playMusic();
+        }
 
         this.buttons.forEach(button => button.draw());
-        storeItem('CTI', currentTrackIndex);
-        storeItem('IMP', isMusicPlaying);
     };
 
     this.mousePressed = function() {
@@ -49,27 +57,43 @@ function Loadscreen() {
     this.mouseMoved = function() {
         this.buttons.forEach(button => button.updateHover());
     };
+
     this.playMusic = function() {
-        if (!isMusicPlaying && muziek.length > 0) {
-            muziek[currentTrackIndex].play();
-            isMusicPlaying = true;
-            muziek[currentTrackIndex].onended(this.playNextTrack.bind(this));
+        if (muziek.length === 0) return;
+        const allowed = Boolean(getItem('IMP'));
+        if (!allowed) {
+            isMusicPlaying = false;
+            return;
         }
-    }
+        getAudioContext().resume();
+        if (!isMusicPlaying) {
+            const track = muziek[currentTrackIndex] || muziek[0];
+            if (!track) return;
+            track.setVolume(0.3);
+            track.play();
+            track.onended(this.playNextTrack.bind(this));
+            isMusicPlaying = true;
+            storeItem('IMP', true);
+            storeItem('CTI', currentTrackIndex);
+        }
+    };
 
     this.playNextTrack = function() {
-        if (muziek[currentTrackIndex] && muziek[currentTrackIndex].isPlaying()) {
-            muziek[currentTrackIndex].stop();
+        if (!isMusicPlaying || muziek.length === 0) return;
+
+        const current = muziek[currentTrackIndex];
+        if (current && current.isPlaying()) {
+            current.stop();
         }
 
-        currentTrackIndex++;
-        if (currentTrackIndex >= muziek.length) {
-            currentTrackIndex = 0;
-        }
+        currentTrackIndex = (currentTrackIndex + 1) % muziek.length;
+        storeItem('CTI', currentTrackIndex);
 
-        if (muziek[currentTrackIndex]) {
-            muziek[currentTrackIndex].play();
-            muziek[currentTrackIndex].onended(this.playNextTrack.bind(this));
+        const next = muziek[currentTrackIndex];
+        if (next) {
+            next.setVolume(0.3);
+            next.play();
+            next.onended(this.playNextTrack.bind(this));
         }
-    }
+    };
 }

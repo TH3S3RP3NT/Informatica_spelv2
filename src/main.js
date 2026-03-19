@@ -5,9 +5,10 @@ let musicData;
 function preload() {
     fightimg = loadImage('public/assets/img/fight.gif');
     font = loadFont('public/assets/fonts/AvenirLTProBook.otf')
-    musicData = loadJSON("public/assets/json/music.json", () => {// Tristan
+    musicData = loadJSON("public/assets/json/music.json", () => {
         for (let i = 0; i < musicData.Muziek.length; i++) {
-            muziek.push(loadSound('public/assets/music/' + musicData.Muziek[i].filename));
+            const sound = loadSound('public/assets/music/' + musicData.Muziek[i].filename, () => sound.setVolume(0.3));
+            muziek.push(sound);
         }
     });
 }
@@ -15,6 +16,7 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
+    frameRate(60);
     sceneManager = new SceneManager();
     sceneManager.wire();
     sceneManager.showScene(Loadscreen);
