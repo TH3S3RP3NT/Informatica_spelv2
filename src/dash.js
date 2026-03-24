@@ -192,6 +192,7 @@ function Dash() {
             if (!coin.collected && this.rectCollision(game.player.x, game.player.y, game.player.width, game.player.height, coin.x, coin.y, coin.size, coin.size)) {
                 coin.collected = true;
                 game.score += 10;
+                this.playCoinSound();
             }
         }
 
@@ -330,6 +331,9 @@ function Dash() {
         textSize(15);
         text("Press R to play again, or Press L to go to the leaderboard", width / 2, height / 2 + 40);
 
+        textSize(14);
+        text(`Next target: ${game.targetScore} score`, width / 2, height / 2 + 70);
+
         if (keyIsPressed && key === 'r') {
             this.setup();
             game.gameOver = false;
@@ -355,6 +359,8 @@ function Dash() {
                     game._scoreSaved = true;
                     this.save();
                 }
+
+                game.targetScore += 100;
             }
         }
     };
@@ -645,6 +651,18 @@ function Dash() {
             ground.y = game.groundY;
             ground.height = 50;
             ground.width = windowWidth;
+        }
+    };
+
+    this.playCoinSound = function () {
+        const allowedFlag = getItem('SFX');
+        const sfxAllowed = (allowedFlag === null || allowedFlag === undefined) ? true : Boolean(allowedFlag);
+        if (!sfxAllowed) return;
+        if (!coinSound || (typeof coinSound.isLoaded === 'function' && !coinSound.isLoaded())) return;
+        try {
+            coinSound.stop();
+            coinSound.play();
+        } catch (e) {
         }
     };
 

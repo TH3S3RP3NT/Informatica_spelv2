@@ -2,6 +2,10 @@
   "Muziek": [
     {
       "name": "La femme d'argent",
+      "filename": "Lafemmedargent.mp3"
+    },
+    {
+      "name": "Redbone",
       "filename": "Redbone.mp3"
     }
   ]
